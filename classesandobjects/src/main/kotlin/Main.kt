@@ -1,162 +1,128 @@
-//parameterized constructor
-//primary constructor
+// Define an open class named SmartDevice with a primary constructor that takes 'name' and 'category' parameters.
+open class SmartDevice(val name: String, val category: String) {
+    // Declare a property 'deviceType' with default value "Unknown".
+    open val deviceType = "Unknown"
 
-open class SmartDevice(val name: String, val category: String){
-//    Class properties
-//    Override superclass properties from subclasses
-    open val deviceType="Unknown"
+    // Declare a property 'deviceStatus' with default value "online".
     var deviceStatus = "online"
-//    secondary constructor
 
-    constructor(name: String, category: String, statusCode: Int) : this(name, category){
-        val deviceStatus = when(statusCode){
+    // Define a secondary constructor that takes 'name', 'category', and 'statusCode' parameters.
+    constructor(name: String, category: String, statusCode: Int) : this(name, category) {
+        // Determine 'deviceStatus' based on 'statusCode' using a when expression.
+        val deviceStatus = when (statusCode) {
             0 -> "offline"
             1 -> "online"
             else -> "unknown"
         }
         println("The device status is $deviceStatus")
     }
-//    Class methods
-//    Override methods using the open keyword
-    open fun turnOn(){
+
+    // Define open methods to turn on and turn off the device.
+    open fun turnOn() {
         println("Smart device is turned on")
     }
 
-   open fun turnOff(){
+    open fun turnOff() {
         println("Smart device is turned off")
     }
 }
 
-//Implementing class inheritance
-//IS-A relationships
-// The SmartHome class HAS-A smart TV device.
-class SmartTvDevice(deviceName: String, deviceCategory: String):
-    SmartDevice(name = deviceName, category = deviceCategory) {
+// Create a subclass SmartTvDevice that inherits from SmartDevice and takes 'deviceName' and 'deviceCategory' parameters.
+class SmartTvDevice(deviceName: String, deviceCategory: String) : SmartDevice(name = deviceName, category = deviceCategory) {
+    // Override the 'deviceType' property.
+    override val deviceType = "Smart TV"
 
-        override val deviceType="Smart TV"
-//        use of setters and getters
+    // Define properties for speaker volume and channel number.
     var speakerVolume = 2
-        set(value) {
-            if (value in 0..100) {
-                field = value
-            }
+    var channelNumber = 1
 
-        }
-
-    var channelNumber=1
-        set(value) {
-            if (value in 0..200) {
-                field = value
-            }
-        }
-
-
+    // Override the 'turnOn' method to print additional information.
     override fun turnOn() {
-      super.turnOn()
-
-        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is \" +\n" +
-                "                \"set to $channelNumber.")
+        super.turnOn()
+        println("$name is turned on. Speaker volume is set to $speakerVolume and channel number is set to $channelNumber.")
     }
 
-    override fun turnOff() {
-      super.turnOff()
-        println("$name is turned off.")
-    }
-    fun setSpeakerVolume(){
-        speakerVolume ++
+    // Define methods to adjust speaker volume and channel.
+    fun setSpeakerVolume() {
+        speakerVolume++
         println("The speaker volume increased to $speakerVolume.")
     }
 
-    fun nextChannel(){
-        channelNumber ++
+    fun nextChannel() {
+        channelNumber++
         println("The channel number increased to $channelNumber.")
     }
-
 }
 
+// Create another subclass SmartLightDevice that inherits from SmartDevice.
+class SmartLightDevice(deviceName: String, deviceCategory: String) : SmartDevice(name = deviceName, category = deviceCategory) {
+    // Override the 'deviceType' property.
+    override val deviceType = "Smart Light"
 
-
-class SmartLightDevice(deviceName: String, deviceCategory: String): SmartDevice(name=deviceName, category=deviceCategory) {
-
-    override val deviceType="Smart Light"
-
-
+    // Define a property for brightness level.
     var brightnessLevel = 0
-        set(value) {
-            if (value in 0..100) {
-                field = value
-            }
-        }
 
+    // Override the 'turnOn' method to print additional information.
     override fun turnOn() {
-       super.turnOn()
-        brightnessLevel =2
-        print("$name turned on. Brightness Level is $brightnessLevel.")
+        super.turnOn()
+        brightnessLevel = 2
+        println("$name turned on. Brightness Level is $brightnessLevel.")
     }
 
-    override fun turnOff() {
-       super.turnOff()
-        brightnessLevel =0
-        print("$name turned off. Brightness Level is $brightnessLevel.")
-
-    }
+    // Define a method to increase brightness.
     fun increaseBrightness() {
         brightnessLevel++
-
         println("The brightness level increased to $brightnessLevel.")
     }
 }
 
+// Create a class SmartHome that takes SmartTvDevice and SmartLightDevice instances.
 class SmartHome(
-    val smartTvDevice : SmartTvDevice,
-    val smartLightDevice : SmartLightDevice){
+    val smartTvDevice: SmartTvDevice,
+    val smartLightDevice: SmartLightDevice
+) {
+    // Define methods to control the devices.
     fun turnOnTV() {
         smartTvDevice.turnOn()
-
     }
 
     fun turnOffTV() {
         smartTvDevice.turnOff()
     }
 
-    fun increaseTVVolume(){
+    fun increaseTVVolume() {
         smartTvDevice.setSpeakerVolume()
     }
 
-    fun changeChannelToNext(){
+    fun changeChannelToNext() {
         smartTvDevice.nextChannel()
     }
 
-    fun turnOnLight(){
+    fun turnOnLight() {
         smartLightDevice.turnOn()
     }
 
-    fun turnOffLight(){
+    fun turnOffLight() {
         smartLightDevice.turnOff()
     }
 
-    fun brightnessLevel(){
-
+    fun brightnessLevel() {
         smartLightDevice.increaseBrightness()
     }
 
-    fun turnOffAllDevices(){
+    fun turnOffAllDevices() {
         turnOffTV()
         turnOffLight()
     }
 }
 
-
-
-
-
-//Main function
+// Main function
 fun main() {
-
-//    Instance of a class
-    var smartDevice: SmartDevice =SmartTvDevice("Android Smart TV","Entertainment")
+    // Create an instance of SmartTvDevice and call its methods.
+    var smartDevice: SmartDevice = SmartTvDevice("Android Smart TV", "Entertainment")
     smartDevice.turnOn()
 
-    smartDevice=SmartLightDevice("Google Light", "Utility")
+    // Create an instance of SmartLightDevice and call its methods.
+    smartDevice = SmartLightDevice("Google Light", "Utility")
     smartDevice.turnOn()
 }
