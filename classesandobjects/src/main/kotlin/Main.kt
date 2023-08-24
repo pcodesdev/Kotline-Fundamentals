@@ -8,7 +8,7 @@ open class SmartDevice(val name: String, val category: String) {
     // Declare a property deviceStatus with a default value "online". The setter is protected,
     // meaning it can only be accessed within this class and its subclasses.
     var deviceStatus = "online"
-        protected set
+        internal set
 
     // Declare a property deviceType with a default value "unknown". The property is open and can be
     // overridden by subclasses.
@@ -22,6 +22,10 @@ open class SmartDevice(val name: String, val category: String) {
     // Define an open method turnOff() that sets the deviceStatus to "off".
     open fun turnOff() {
         deviceStatus = "off"
+    }
+//    Challenge -01
+  open  fun printDeviceInfo(){
+        println("Device name: $name device category: $category device type: $deviceType")
     }
 }
 
@@ -64,6 +68,17 @@ class SmartTvDevice(deviceName: String, deviceCategory: String) :
         channelNumber++
         println("Channel number increased to $channelNumber.")
     }
+//    challenge -02
+    fun decreaseVolume(){
+        speakerVolume --
+
+    println("Speaker volume decreased to $speakerVolume.")
+
+    }
+    fun previousChannel() {
+        channelNumber --
+        println("Channel number decreased to $channelNumber.")
+    }
 }
 
 // Define a subclass SmartLightDevice that inherits from SmartDevice and takes deviceName and deviceCategory parameters.
@@ -95,6 +110,11 @@ class SmartLightDevice(deviceName: String, deviceCategory: String) :
         brightnessLevel++
         println("Brightness increased to $brightnessLevel.")
     }
+//    Challenge -03
+    fun decreaseBrightness() {
+        brightnessLevel--
+    println("Bright decreased to $brightnessLevel.")
+    }
 }
 
 // Define a class SmartHome that takes instances of SmartTvDevice and SmartLightDevice.
@@ -106,35 +126,88 @@ class SmartHome(val smartTvDevice: SmartTvDevice, val smartLightDevice: SmartLig
 
     // Define methods to control various devices in the smart home.
     fun turnOnTv() {
-        deviceTurnOnCount++
-        smartTvDevice.turnOn()
+//        Challenge -04
+        if (smartTvDevice.deviceStatus == "on") {
+            deviceTurnOnCount ++
+            smartTvDevice.turnOn()
+        } else {
+            println("Cannot turn on TV. Device status is ${smartTvDevice.deviceStatus}.")
+        }
     }
 
     fun turnOffTv() {
-        deviceTurnOnCount--
-        smartTvDevice.turnOff()
+        if (smartTvDevice.deviceStatus == "of") {
+            deviceTurnOnCount--
+            smartTvDevice.turnOff()
+        } else {
+            println("Cannot turn off TV. Device status is ${smartTvDevice.deviceStatus}.")
+        }
     }
-
     fun increaseTvVolume() {
-        smartTvDevice.increaseSpeakerVolume()
+        smartTvDevice.run {
+            if (deviceStatus == "on") {
+                increaseSpeakerVolume()
+            } else {
+                println("TV volume increase by ${smartTvDevice.increaseSpeakerVolume()}. Device status is $deviceStatus.")
+            }
+        }
     }
 
     fun changeTvChannelToNext() {
-        smartTvDevice.nextChannel()
+        smartTvDevice.run {
+            if (deviceStatus == "on") {
+                nextChannel()
+            } else {
+                println("TV channel changed by ${smartTvDevice.increaseSpeakerVolume()}. Device status is $deviceStatus.")
+            }
+        }
     }
 
     fun turnOnLight() {
-        deviceTurnOnCount++
-        smartLightDevice.turnOn()
+        if (smartLightDevice.deviceStatus == "on") {
+            deviceTurnOnCount++
+            smartLightDevice.turnOn()
+        } else {
+            println("Cannot turn on light. Device status is ${smartLightDevice.deviceStatus}.")
+        }
     }
 
     fun turnOffLight() {
-        deviceTurnOnCount--
-        smartLightDevice.turnOff()
+        if (smartLightDevice.deviceStatus == "on") {
+            deviceTurnOnCount--
+            smartLightDevice.turnOff()
+        } else {
+            println("Cannot turn off light. Device status is ${smartLightDevice.deviceStatus}.")
+        }
     }
 
     fun increaseLightBrightness() {
-        smartLightDevice.increaseBrightness()
+        smartLightDevice.run {
+            if (deviceStatus == "on") {
+                increaseBrightness()
+            } else {
+                println("Cannot increase light brightness. Device status is $deviceStatus.")
+            }
+        }
+    }
+
+    fun decreaseLightBrightness() {
+        smartLightDevice.run {
+            if (deviceStatus == "on") {
+                decreaseBrightness()
+            } else {
+                println("Cannot decrease light brightness. Device status is $deviceStatus.")
+            }
+        }
+    }
+
+//    challenge 05
+    fun printSmartTvInfo() {
+        smartTvDevice.printDeviceInfo()
+    }
+
+    fun printSmartLightInfo() {
+        smartLightDevice.printDeviceInfo()
     }
 
     fun turnOffAllDevices() {
@@ -186,6 +259,8 @@ fun main() {
     smartHome.turnOnLight()
     println("Total number of devices currently turned on: ${smartHome.deviceTurnOnCount}")
     println()
+    smartHome.printSmartLightInfo()
+    smartHome.printSmartTvInfo()
 }
 
 //
