@@ -41,17 +41,27 @@ fun main(){
 //    trickFunction()
 //    treat()
 
+//    val coins:(Int)->String={
+//        quantity->"$quantity quarters"
+//    }
+
+//    shorthand syntax
     val coins:(Int)->String={
-        quantity->"$quantity quarters"
+            "$it quarters"
     }
 
     val cupCakes:(Int)->String={
       "Have a cup cake!"
     }
 
-    val trickFunction= trickOrTreat(false,coins)
+//    Use trailing lambda syntax
+    val trickFunction= trickOrTreat(false){"$it quarters"}
     val treatFunction=trickOrTreat(true,null)
-    trickFunction()
+
+//    Use the repeat() function
+   repeat(4) {
+       trickFunction()
+   }
     treatFunction()
 
 }
